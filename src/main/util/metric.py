@@ -12,9 +12,19 @@ def RMSE(records):
         @param records: 预测评价与真实评价记录的一个list
         @return: RMSE
     """
-    numerator = sum([(pred_rating - actual_rating)**2 for pred_rating, actual_rating in records])
+    numerator = sum([(pred_rating - actual_rating) ** 2 for pred_rating, actual_rating in records])
     denominator = float(len(records))
     return math.sqrt(numerator / denominator)
+
+
+def MAE(records):
+    """计算MAE
+        @param records: 预测评价与真实评价记录的一个list
+        @return: RMSE
+    """
+    numerator = sum([abs(pred_rating - actual_rating) for pred_rating, actual_rating in records])
+    denominator = float(len(records))
+    return numerator / denominator
 
 
 def MSE(records):
@@ -22,7 +32,7 @@ def MSE(records):
         @param records: 预测评价与真实评价记录的一个list
         @return: MSE
     """
-    numerator = sum([(pred_rating - actual_rating)**2 for pred_rating, actual_rating in records])
+    numerator = sum([(pred_rating - actual_rating) ** 2 for pred_rating, actual_rating in records])
     denominator = float(len(records))
     return numerator / denominator
 
