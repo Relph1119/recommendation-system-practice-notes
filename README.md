@@ -6,6 +6,9 @@
 ## 使用说明
 本笔记是搭配《推荐系统实践》一书来阅读。
 
+## 在线阅读地址
+在线阅读地址：https://relph1119.github.io/recommendation-system-practice-notes
+
 ## 选用的《推荐系统实践》版本
 <img src="docs/images/recommendation-system-practice-book.jpg" width="336" height= "500">
 
