@@ -1,9 +1,6 @@
 #! /usr/bin/python3
 # coding=utf-8
 
-'''
-    评价
-'''
 import math
 
 
@@ -38,13 +35,11 @@ def MSE(records):
 
 
 def precision(recommends, tests):
-    """计算Precision
-    :param recommends: dict
-        给用户推荐的商品，recommends为一个dict，格式为 { userID : 推荐的物品 }
-    :param tests: dict
-        测试集，同样为一个dict，格式为 { userID : 实际发生事务的物品 }
-    :return: float
-        Precision
+    """
+    计算Precision
+    :param recommends: 给用户推荐的商品，recommends为一个dict，格式为 { user_id : 推荐的物品 }
+    :param tests: 测试集，同样为一个dict，格式为 { userID : 实际发生事务的物品 }
+    :return: Precision
     """
     n_union = 0.
     user_sum = 0.
@@ -59,10 +54,10 @@ def precision(recommends, tests):
 
 def recall(recommends, tests):
     """
-        计算Recall
-        @param recommends:   给用户推荐的商品，recommends为一个dict，格式为 { userID : 推荐的物品 }
-        @param tests:  测试集，同样为一个dict，格式为 { userID : 实际发生事务的物品 }
-        @return: Recall
+    计算Recall召回率
+    :param recommends: 给用户推荐的商品，recommends为一个dict，格式为{ user_id : 推荐的物品 }
+    :param tests: 测试集，同样为一个dict，格式为{ user_id : 实际发生行为的物品 }
+    :return:
     """
     n_union = 0.
     recommend_sum = 0.
@@ -77,9 +72,10 @@ def recall(recommends, tests):
 
 def coverage(recommends, all_items):
     """
-        计算覆盖率
-        @param recommends : dict形式 { userID : Items }
-        @param all_items :  所有的items，为list或set类型
+    计算覆盖率
+    :param recommends:
+    :param all_items: 所有的物品，为list或set类型
+    :return:
     """
     recommend_items = set()
     for _, items in recommends.items():
@@ -89,15 +85,16 @@ def coverage(recommends, all_items):
 
 
 def popularity(item_popular, recommends):
-    """计算流行度
-        @param item_popular:  商品流行度　dict形式{ itemID : popularity}
-        @param recommends :  dict形式 { userID : Items }
-        @return: 平均流行度
     """
-    popularity = 0.  # 流行度
+    计算流行度
+    :param item_popular: 商品流行度　dict形式{ item_id : popularity}
+    :param recommends: 给用户推荐的商品，recommends为一个dict，格式为{ user_id : 推荐的物品 }
+    :return: 平均流行度
+    """
+    popularity_value = 0.  # 流行度
     n = 0.
     for _, items in recommends.items():
         for item in items:
-            popularity += math.log(1. + item_popular.get(item, 0.))
+            popularity_value += math.log(1. + item_popular.get(item, 0.))
             n += 1
-    return popularity / n
+    return popularity_value / n

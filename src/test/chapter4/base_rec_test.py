@@ -13,7 +13,7 @@
 """
 import unittest
 from main.util import delicious_reader
-from main.chapter4 import BaseRec
+from main.chapter4.base_rec import BaseRec
 
 
 class BaseRecTestCase(unittest.TestCase):

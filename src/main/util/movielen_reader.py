@@ -17,11 +17,13 @@ def loadfile(filename):
             yield line
 
 
-def read_rating_data(path="./data/ml-1m/ratings.dat", train_rate=1., seed=1):
-    """载入评分数据
-        @param path:  文件路径
-        @param train_rate:   训练集所占整个数据集的比例，默认为1，表示所有的返回数据都是训练集
-        @return: (训练集，测试集) 
+def read_rating_data(path="../../data/ml-1m/ratings.dat", train_rate=1., seed=1):
+    """
+    载入评分数据
+    :param path: 文件路径
+    :param train_rate: 训练集所占整个数据集的比例，默认为1，表示所有的返回数据都是训练集
+    :param seed:
+    :return: (训练集，测试集)
     """
     trainset = list()
     testset = list()
@@ -36,7 +38,7 @@ def read_rating_data(path="./data/ml-1m/ratings.dat", train_rate=1., seed=1):
     return trainset, testset
 
 
-def all_items(path="./data/ml-1m/ratings.dat"):
+def all_items(path="../../data/ml-1m/ratings.dat"):
     """返回所有的movie"""
     items = set()
     for line in loadfile(filename=path):

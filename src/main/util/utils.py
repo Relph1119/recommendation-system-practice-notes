@@ -25,20 +25,19 @@ def save_file(filepath, data):
 
 def load_file(filepath):
     """载入二进制数据"""
+    if not os.path.exists(filepath):
+        print(filepath, "isn't exist!!")
     with open(filepath, "rb") as f:
         data = pickle.load(f)
     return data
 
 
 def open_text(filename,skip_row = 0):
-    """打开文本文件
-
-    :param filename: str
-        文件名
-    :param skip_row: int
-         需要跳过的行数
-    :return generator
-        生成每一行的文本
+    """
+    打开文本文件
+    :param filename: str 文件名
+    :param skip_row: int 需要跳过的行数
+    :return generator 生成每一行的文本
     """
     with open(filename, "r", encoding="utf-8") as f:
         for i, line in enumerate(f):

@@ -1,28 +1,32 @@
 #!/usr/bin/python3
 # coding=utf-8
-'''
+"""
 Created on 2018年6月15日
-
 @author: qcymkxyc
-'''
-from main.chapter2 import UserCF
-from collections import defaultdict
+"""
 import math
-from operator import itemgetter
 import sys
+from collections import defaultdict
+from operator import itemgetter
+
+from main.chapter2.usercf import UserCF
 from main.util.utils import load_file, save_file
 
 
 class ItemCF(UserCF):
-    """基于物品的协同过滤矩阵"""
+    """
+    基于物品的协同过滤矩阵
+    """
 
     def __init__(self):
-        pass
+        super().__init__()
 
     def train(self, origin_data, sim_matrix_path="store/item_sim.pkl"):
-        """训练模型
-            @param origin_data: 原始数据
-            @param sim_matrix_path:  协同矩阵保存的路径
+        """
+        训练模型
+        :param origin_data: 原始数据
+        :param sim_matrix_path: 协同矩阵保存的路径
+        :return:
         """
         self.origin_data = origin_data
         # 初始化训练集
@@ -32,7 +36,7 @@ class ItemCF(UserCF):
             print("开始载入用户协同矩阵....", file=sys.stderr)
             self.item_sim_matrix = load_file(sim_matrix_path)
             print("载入协同过滤矩阵完成", file=sys.stderr)
-        except BaseException:
+        except FileNotFoundError:
             print("载入用户协同过滤矩阵失败，重新计算协同过滤矩阵", file=sys.stderr)
             # 计算用户协同矩阵
             self.item_sim_matrix = self._item_similarity()
@@ -45,8 +49,8 @@ class ItemCF(UserCF):
         """计算商品协同矩阵
             @return: 物品的协同矩阵
         """
-        item_sim_matrix = dict()    # 物品的协同矩阵
-        N = defaultdict(int)    # 每个物品的流行度
+        item_sim_matrix = dict()  # 物品的协同矩阵
+        N = defaultdict(int)  # 每个物品的流行度
 
         # 统计同时购买商品的人数
         for _, items in self.train.items():
