@@ -3,6 +3,7 @@
 """
 Created on 2018年6月15日
 @author: qcymkxyc
+@Desc: ItemCF算法
 """
 import math
 import sys
@@ -18,19 +19,18 @@ class ItemCF(UserCF):
     基于物品的协同过滤矩阵
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, origin_data):
+        super().__init__(origin_data)
+        self.item_sim_matrix = None
 
-    def train(self, origin_data, sim_matrix_path="store/item_sim.pkl"):
+    def train(self, sim_matrix_path="store/item_sim.pkl"):
         """
         训练模型
-        :param origin_data: 原始数据
         :param sim_matrix_path: 协同矩阵保存的路径
         :return:
         """
-        self.origin_data = origin_data
         # 初始化训练集
-        UserCF._init_train(self, origin_data)
+        UserCF._init_train(self)
         print("开始训练模型", file=sys.stderr)
         try:
             print("开始载入用户协同矩阵....", file=sys.stderr)
@@ -46,14 +46,15 @@ class ItemCF(UserCF):
         print("保存协同过滤矩阵完成", file=sys.stderr)
 
     def _item_similarity(self):
-        """计算商品协同矩阵
-            @return: 物品的协同矩阵
+        """
+        计算商品协同矩阵
+        :return: 物品的协同矩阵
         """
         item_sim_matrix = dict()  # 物品的协同矩阵
         N = defaultdict(int)  # 每个物品的流行度
 
         # 统计同时购买商品的人数
-        for _, items in self.train.items():
+        for _, items in self.train_dataset.items():
             for i in items:
                 item_sim_matrix.setdefault(i, dict())
                 # 统计商品的流行度
@@ -73,14 +74,15 @@ class ItemCF(UserCF):
         return item_sim_matrix
 
     def recommend(self, user, N, K):
-        """推荐
-            @param user:   用户
-            @param N:    推荐的商品个数
-            @param K:    查找最相似的商品个数
-            @return: 商品字典 {商品 : 相似性打分情况}
+        """
+        推荐
+        :param user: 用户
+        :param N: 推荐的商品个数
+        :param K: 查找最相似的商品个数
+        :return: 商品字典 {商品 : 相似性打分情况}
         """
         recommends = dict()
-        items = self.train[user]
+        items = self.train_dataset[user]
         for item in items:
             for i, sim in sorted(self.item_sim_matrix.get(item, {}).items(), key=itemgetter(1), reverse=True)[: K]:
                 if i in items:

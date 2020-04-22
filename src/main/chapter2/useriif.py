@@ -24,7 +24,7 @@ class UserIIF(UserCF):
         """
         # 建立用户倒排表
         item_user = dict()
-        for user, items in self.train.items():
+        for user, items in self.train_dataset.items():
             for item in items:
                 item_user.setdefault(item, set())
                 item_user[item].add(user)

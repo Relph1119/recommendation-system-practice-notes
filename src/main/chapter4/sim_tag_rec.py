@@ -30,7 +30,7 @@ class SimTagTFIDF(TagBasedTFIDFPlus):
         self.tag_vecs = None     # 标签向量
 
     def train(self, origin_data):
-        TagBasedTFIDFPlus.train(self, origin_data)
+        TagBasedTFIDFPlus.train(self)
         # 构建标签向量
         self._build_tag_vec(self.train_data)
 

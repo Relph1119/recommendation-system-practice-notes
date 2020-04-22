@@ -1,10 +1,10 @@
 #! /usr/bin/python3
 # coding=utf-8
-'''
+"""
 Created on 2018年6月12日
-
 @author: qcymkxyc
-'''
+@Desc: UserCF算法
+"""
 import math
 import sys
 from collections import defaultdict
@@ -47,10 +47,10 @@ class UserCF:
         初始化训练集数据
         :return:
         """
-        self.train = dict()
+        self.train_dataset = dict()
         for user, item, _ in self.origin_data:
-            self.train.setdefault(user, set())
-            self.train[user].add(item)
+            self.train_dataset.setdefault(user, set())
+            self.train_dataset[user].add(item)
 
     def user_similarity(self):
         """
@@ -59,7 +59,7 @@ class UserCF:
         """
         # 建立用户倒排表
         item_user = dict()
-        for user, items in self.train.items():
+        for user, items in self.train_dataset.items():
             for item in items:
                 item_user.setdefault(item, set())
                 item_user[item].add(user)
@@ -91,11 +91,11 @@ class UserCF:
         :param K: 查找最相似的用户个数
         :return: 商品字典 {商品 : 相似性打分情况}
         """
-        related_items = self.train.get(user, set)
+        related_items = self.train_dataset.get(user, set)
         recommmend_items = dict()
         for v, sim in sorted(self.user_sim_matrix.get(user, dict).items(),
                              key=itemgetter(1), reverse=True)[:K]:
-            for item in self.train[v]:
+            for item in self.train_dataset[v]:
                 if item in related_items:
                     continue
                 recommmend_items.setdefault(item, 0.)
