@@ -3,7 +3,7 @@
 """
 Created on 2018年6月15日
 @author: qcymkxyc
-@Desc: ItemCF算法
+@desc: ItemCF算法
 """
 import math
 import sys

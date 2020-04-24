@@ -1,22 +1,17 @@
-#!/usr/bin/python3
-# coding=utf-8
+#!/usr/bin/env python
+# encoding: utf-8
 """
-
-@Time    : 18-11-2 下午2:03
-@Author  : qcymkxyc
-@Email   : qcymkxyc@163.com
-@File    : base_rec.py
-@Software: PyCharm
-
-基本基于标签的推荐
-
+@author: HuRuiFeng
+@file: simple_tag_based.py
+@time: 2020/4/23 15:06
+@project: recommendation-system-practice-notes
+@desc: SimpleTagBased算法，该算法效果不佳
 """
 from collections import defaultdict
 from operator import itemgetter
 
 
-# TODO 效果不佳
-class BaseRec:
+class SimpleTagBased:
     """基本的基于标签的推荐"""
 
     def __init__(self):
@@ -26,8 +21,8 @@ class BaseRec:
         self.train_data = list()
 
     def train(self, origin_data):
-        """训练模型
-
+        """
+        训练模型
         :param origin_data: list
             原始数据，即训练集，list中的元素以(user_id,bookmark_id,tag_id)
             三元组的形式存储
@@ -38,19 +33,18 @@ class BaseRec:
         self._build_matrix(self.train_data)
 
     def _build_matrix(self, train):
-        """建立算法对应的字典
-
+        """
+        建立算法对应的字典
         1. 用户-标签字典
         2. 标签-物品字典
         3. 用户已经购买的物品字典
-
         :param train: list((int,int,int))
             训练集, list中的元素以(user_id,bookmark_id,tag_id)
             三元组的形式存储
         """
-        self.user_tag = defaultdict(lambda: {})     # 用户 - 标签字典
-        self.tag_item = defaultdict(lambda: {})     # 商品 - 标签字典
-        self.user_item = defaultdict(lambda: list())       # 用户已经购买的商品
+        self.user_tag = defaultdict(lambda: {})  # 用户 - 标签字典
+        self.tag_item = defaultdict(lambda: {})  # 商品 - 标签字典
+        self.user_item = defaultdict(lambda: list())  # 用户已经购买的商品
 
         for user_id, item_id, tag_id in train:
             self.user_tag[user_id].setdefault(tag_id, 0)
@@ -62,12 +56,10 @@ class BaseRec:
             self.user_item[user_id].append(item_id)
 
     def _code_start(self, rec_count):
-        """冷启动
-
-        :param rec_count: int
-            推荐个数
-        :return: list
-            推荐的商品
+        """
+        冷启动
+        :param rec_count: int 推荐个数
+        :return: list 推荐的商品
         """
         if not self.items_popularity:
             self.items_popularity = dict()
@@ -82,12 +74,10 @@ class BaseRec:
         return recommends
 
     def _recommend_user(self, user):
-        """给用户推荐商品
-
-        :param user: int
-            user_id
-        :return: dict(int:int)
-            排序后的商品推荐的打分情况{item_id:打分情况}（从高到低）
+        """
+        给用户推荐商品
+        :param user: int user_id
+        :return: dict(int:int) 排序后的商品推荐的打分情况{item_id:打分情况}（从高到低）
         """
         user_tags = self.user_tag[user]
         recommend_dict = dict()
@@ -106,18 +96,13 @@ class BaseRec:
         return recommends
 
     def recommend(self, user, rec_count):
-        """给定用户推荐商品
-
+        """
+        给定用户推荐商品
         如果用户在训练集中未出现(即冷启动问题)，则推荐最热门的商品(对应打标签最多)
-
-        :param user: int
-            用户ID
-        :param rec_count: int
-            推荐数量
-        :return: list
-            推荐商品ID的list
-        :raises:
-            AttributeError : 模型未训练
+        :param user: int 用户ID
+        :param rec_count: int 推荐数量
+        :return: list 推荐商品ID的list
+        :raises: AttributeError : 模型未训练
         """
         try:
             user_tags = self.user_tag[user]
@@ -135,14 +120,11 @@ class BaseRec:
         return recommends
 
     def recommend_users(self, users, recommend_count):
-        """给多个用户推荐商品
-
-        :param users: list
-            用户list
-        :param recommend_count: int
-            推荐的商品个数
-        :return: dict : {用户ID:[推荐商品1，推荐商品2，......]}
-            推荐的商品字典
+        """
+        给多个用户推荐商品
+        :param users: list 用户list
+        :param recommend_count: int 推荐的商品个数
+        :return: dict: 推荐的商品字典 {用户ID:[推荐商品1，推荐商品2，......]}
         """
         user_recommends = dict()
         for user in users:

@@ -1,32 +1,32 @@
-#!/usr/bin/python3
-# coding=utf-8
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+@author: HuRuiFeng
+@file: tag_based_tfidf_plus.py
+@time: 2020/4/23 19:13
+@project: recommendation-system-practice-notes
+@desc: TagBasedTFIDF++算法
 """
 
-@Time    : 下午3:01
-@Author  : qcymkxyc
-@Email   : qcymkxyc@163.com
-@File    : TFIDF_puls_rec.py
-@Software: PyCharm
-
-"""
-from main.chapter4 import TagBasedTFIDF
-from operator import itemgetter
 from math import log1p
+from operator import itemgetter
+
+from main.chapter4.tag_based_tfidf import TagBasedTFIDF
 
 
 class TagBasedTFIDFPlus(TagBasedTFIDF):
 
     def __init__(self):
-        TagBasedTFIDF.__init__(self)
+        super().__init__()
         self.item_user_count = dict()
 
     def _build_matrix(self, train):
-        TagBasedTFIDF._build_matrix(self, train)
+        super()._build_matrix(train)
         for user_id, item_id, tag_id in train:
             self.item_user_count.setdefault(item_id, set())
             self.item_user_count[item_id].add(user_id)
 
-        self.item_user_count = {item_id : len(users) for item_id, users in self.item_user_count.items()}
+        self.item_user_count = {item_id: len(users) for item_id, users in self.item_user_count.items()}
 
     def _recommend_user(self, user):
         user_tags = self.user_tag[user]

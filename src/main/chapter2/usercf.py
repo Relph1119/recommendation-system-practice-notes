@@ -3,7 +3,7 @@
 """
 Created on 2018年6月12日
 @author: qcymkxyc
-@Desc: UserCF算法
+@desc: UserCF算法
 """
 import math
 import sys
@@ -117,6 +117,3 @@ class UserCF:
             recommend_items[user] = user_recommends
 
         return recommend_items
-
-
-

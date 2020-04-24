@@ -2,10 +2,8 @@
 # coding=utf-8
 """
 Created on 2018年6月2日
-
 @author: qcymkxyc
-
-关于delicious数据集读取集
+@desc: Delicious数据集的读取
 """
 import random
 from main.util import utils

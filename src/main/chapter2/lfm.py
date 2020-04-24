@@ -14,8 +14,8 @@ from operator import itemgetter
 
 import numpy as np
 
-from usercf_test.usercf import UserCF
-from usercf_test.utils import load_file, save_file
+from main.chapter2.usercf import UserCF
+from main.util.utils import load_file, save_file
 
 filepath = "store/LFM"
 
@@ -126,10 +126,10 @@ class LFM(UserCF):
         print("保存隐语义矩阵完成")
 
     def predict(self, user, item):
-        return self.sigmod(np.dot(self.user_p[user], self.movie_q[item]))
+        return self.sigmoid(np.dot(self.user_p[user], self.movie_q[item]))
 
     @staticmethod
-    def sigmod(x):
+    def sigmoid(x):
         return 1.0 / (1 + np.exp(-x))
 
     def recommend(self, user, N, K):

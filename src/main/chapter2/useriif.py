@@ -3,7 +3,7 @@
 """
 Created on 2018年6月14日
 @author: qcymkxyc
-@Desc: User-IIF算法
+@desc: User-IIF算法
 """
 
 import math

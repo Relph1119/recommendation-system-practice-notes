@@ -2,7 +2,6 @@
 # coding=utf-8
 """
 Created on 2018年6月13日
-
 @author: qcymkxyc
 """
 import os
@@ -11,9 +10,10 @@ import pickle
 
 def save_file(filepath, data):
     """
-        保存数据
-        @param filepath:    保存路径
-        @param data:    要保存的数据
+    保存数据
+    :param filepath: 保存路径
+    :param data: 要保存的数据
+    :return:
     """
     parent_path = filepath[: filepath.rfind("/")]
 
@@ -24,7 +24,11 @@ def save_file(filepath, data):
 
 
 def load_file(filepath):
-    """载入二进制数据"""
+    """
+    载入二进制数据
+    :param filepath: 加载数据文件路径
+    :return:
+    """
     if not os.path.exists(filepath):
         print(filepath, "isn't exist!!")
     with open(filepath, "rb") as f:

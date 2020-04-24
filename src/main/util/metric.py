@@ -98,3 +98,34 @@ def popularity(item_popular, recommends):
             popularity_value += math.log(1. + item_popular.get(item, 0.))
             n += 1
     return popularity_value / n
+
+
+def tag_popularity(data):
+    """
+    计算标签数据的流行度
+    :param data: tuple(int,int,int) 数据集（user_id, item_id, tag_id）
+    :return: dict{int, int} 流行度字典{item_id:流行度}
+    """
+    item_popularity = dict()
+    for user_id, item_id, tag_id in data:
+        item_popularity[item_id] = item_popularity.get(item_id, 0) + 1
+    return item_popularity
+
+
+def tag_evaluation(origin_train_dataset, test_dataset, all_items, recommend):
+    """
+    标签数据的模型评价
+    :param origin_train_dataset: dict 训练集 {user_id : [买过的商品1，买过的商品2,...]}
+    :param test_dataset: dict 测试集 {user_id : [买过的商品1，买过的商品2,...]}
+    :param all_items: list 所有商品ID [商品1, 商品2,...]
+    :param recommend: dict 测试集推荐结果 {user_id : [推荐的商品1，推荐的商品2,...]}
+    :return: tuple  (precision, recall, coverage, popularity)
+    """
+    train_item_popularity = tag_popularity(origin_train_dataset)
+
+    precision_value = precision(recommends=recommend, tests=test_dataset)
+    recall_value = recall(recommends=recommend, tests=test_dataset)
+    coverage_value = coverage(all_items=all_items, recommends=recommend)
+    popularity_value = popularity(item_popular=train_item_popularity, recommends=recommend)
+
+    return precision_value, recall_value, coverage_value, popularity_value

@@ -1,33 +1,31 @@
-#!/usr/bin/python3
-# coding=utf-8
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+@author: HuRuiFeng
+@file: tag_based_tfidf.py
+@time: 2020/4/23 16:40
+@project: recommendation-system-practice-notes
+@desc: TagBasedTFIDF算法
 """
 
-@Time    : 18-11-5 下午12:25
-@Author  : qcymkxyc
-@Email   : qcymkxyc@163.com
-@File    : TFIDF_rec.py
-@Software: PyCharm
-
-基于TF-IDF基本基于标签推荐的改进版
-    
-"""
-from main.chapter4 import BaseRec
 from math import log1p
 from operator import itemgetter
 
+from main.chapter4.simple_tag_based import SimpleTagBased
 
-class TagBasedTFIDF(BaseRec):
+
+class TagBasedTFIDF(SimpleTagBased):
     """基于TFIDF的改进版"""
 
     def _build_matrix(self, train):
-        BaseRec._build_matrix(self, train)
+        super()._build_matrix(train)
 
         self.tag_user_count = dict()
         for user_id, item_id, tag_id in train:
             self.tag_user_count.setdefault(tag_id, set())
             self.tag_user_count[tag_id].add(user_id)
 
-        self.tag_user_count = {tag_id : len(users) for tag_id, users in self.tag_user_count.items()}
+        self.tag_user_count = {tag_id: len(users) for tag_id, users in self.tag_user_count.items()}
 
     def _recommend_user(self, user):
         user_tags = self.user_tag[user]

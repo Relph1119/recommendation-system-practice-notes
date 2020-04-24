@@ -4,7 +4,7 @@
 Created on 2018年6月24日
 
 @author: qcymkxyc
-@Desc: ITEMCF-NORM算法
+@desc: ITEMCF-NORM算法
 """
 from main.chapter2.itemcf import ItemCF
 
@@ -13,7 +13,7 @@ class ItemNorm(ItemCF):
     """ItemCF-Norm"""
 
     def train(self, sim_matrix_path="store/itemnorm_sim.pkl"):
-        ItemCF.train(self, sim_matrix_path=sim_matrix_path)
+        super().train(sim_matrix_path=sim_matrix_path)
 
     def _item_similarity(self):
         item_sim_matrix = ItemCF._item_similarity(self)

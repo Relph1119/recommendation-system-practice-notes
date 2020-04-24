@@ -3,7 +3,7 @@
 """
 Created on 2018年6月24日
 @author: qcymkxyc
-@Desc: ItemCF-IUF算法
+@desc: ItemCF-IUF算法
 """
 import math
 from collections import defaultdict
@@ -17,7 +17,7 @@ class ItemIUF(ItemCF):
     """
 
     def train(self, sim_matrix_path="store/itemiuf_sim.pkl"):
-        ItemCF.train(self, sim_matrix_path=sim_matrix_path)
+        super().train(sim_matrix_path=sim_matrix_path)
 
     def _item_similarity(self):
         # 物品的协同矩阵

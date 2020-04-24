@@ -1,10 +1,11 @@
 #! /usr/bin/python3
 # coding=utf-8
-'''
+"""
 Created on 2018年6月10日
 
 @author: qcymkxyc
-'''
+@desc: MovieLen数据集的读取
+"""
 import random
 
 
