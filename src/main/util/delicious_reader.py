@@ -5,72 +5,73 @@ Created on 2018年6月2日
 @author: qcymkxyc
 @desc: Delicious数据集的读取
 """
-import random
-from main.util import utils
-import datetime
+
+import pandas as pd
 
 
-def read_tag(filename, skip_row=0):
-    """读取标签数据集
+def filter_dataset(dataset, site):
+    dataset = dataset[dataset['urlPrincipal'].str.find(site) != -1] \
+        .drop(labels=['urlPrincipal', 'tagID'], axis=1).drop_duplicates()
 
-    :param filename:  str
-        文件名
-    :param skip_row: int
-        跳过的行数
-    :return: tuple
-        三元组(user_id,bookmark_id,tag_id)
-    """
-    with open(filename) as f:
-        for i, line_data in enumerate(f):
-            if i < skip_row:
-                continue
-            user_id, bookmark_id, tag_id = line_data.split("\t")[:3]
-            yield int(user_id.strip()), int(bookmark_id.strip()), int(tag_id.strip())
+    data = {}
+    for index, row in dataset.iterrows():
+        user_id = row['userID']
+        bookmark_id = row['bookmarkID']
+        timestamp = row['timestamp'] // 1000
+        if user_id not in data:
+            data[user_id] = set()
+        data[user_id].add((bookmark_id, timestamp))
 
-
-def split_data(filename, k=0, cv_folder=10, seed=1, skip_row=1):
-    """用cross validation分离训练集以及测试集
-
-    :param filename: str
-        文件名
-    :param k: int
-        cross validation 的第k轮
-    :param cv_folder: int
-        cross validation的总轮数
-    :param seed: int
-        random的seed
-    :param skip_row: int
-        跳过的行数
-    :return: tuple
-        训练集，测试集。均以三元组(user_id,bookmark_id,tag_id)形式返回
-    """
-    train_set = []
-    test_set = []
-
-    random.seed(seed)
-    for sub_data in read_tag(filename, skip_row):
-        if random.randint(0, cv_folder) == k:
-            test_set.append(sub_data)
-        else:
-            train_set.append(sub_data)
-
-    return train_set, test_set
-
-
-def read_tag_time(filename):
-    """读取标签以及时间序列
-
-    :param filename: str
-        文件名
-    :return: list(list(int, int, int,datetime.datetime))
-        [[用户ID,商品ID,标签ID,打标签时间]]
-    """
-    data = list()
-    for line in utils.open_text(filename, skip_row=1):
-        lines = line.split()
-        user_id, item_id, tag_id, timestamp = [int(i) for i in lines]
-        timestamp = timestamp // 1000
-        tag_time = datetime.datetime.fromtimestamp(timestamp)
-        data.append([user_id, item_id, tag_id, tag_time])
-
+    data = {k: list(sorted(list(data[k]), key=lambda x: x[1], reverse=True)) for k in data}
     return data
+
+
+def load_data(bookmark_path, user_bookmark_path):
+    user_bookmark_dataset = pd.read_table(user_bookmark_path, sep='\t', engine='python')
+    bookmark_dataset = pd.read_table(bookmark_path, sep='\t', engine='python')
+    bookmark_dataset.rename(columns={'id': 'bookmarkID'}, inplace=True)
+    dataset = pd.merge(user_bookmark_dataset, bookmark_dataset, how='left', on=['bookmarkID'])
+    dataset = dataset[['userID', 'bookmarkID', 'tagID', 'urlPrincipal', 'timestamp']]
+    return dataset
+
+
+def split_data(dataset, bookmark_path=None, user_bookmark_path=None, site="", load_data_flag=False):
+    """
+    对每个用户按照时间进行从前到后的排序，取最后一个时间的item作为测试集
+    :param dataset: 数据集
+    :param load_data_flag: 是否加载数据
+    :param bookmark_path: bookmark数据集的文件路径
+    :param user_bookmark_path: user_taggedbookmarks-timestamps数据集的文件路径
+    :param site: 网站
+    :return: train_dataset, test_dataset训练集和测试集
+        {userID:[(bookmarkID, timestamp),...],...}
+    """
+    if load_data_flag:
+        if bookmark_path is None:
+            print("请输入user_taggedbookmarks-timestamps数据集的文件路径")
+        if user_bookmark_path is None:
+            print("请输入bookmark数据集的文件路径")
+        dataset = filter_dataset(load_data(bookmark_path, user_bookmark_path), site)
+
+    train_dataset, test_dataset = dict(), dict()
+    for user in dataset:
+        if user not in train_dataset:
+            train_dataset[user] = list()
+            test_dataset[user] = list()
+        data = dataset[user]
+        train_dataset[user].extend(data[1:])
+        test_dataset[user].append(data[0])
+
+    return train_dataset, test_dataset
+
+
+def all_items(dataset):
+    """
+    返回所有的bookmark
+    :param dataset: 数据集
+    :return:
+    """
+    items = set()
+    for item in dataset["bookmarkID"]:
+        items.add(item)
+    return items
