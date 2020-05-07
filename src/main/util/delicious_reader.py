@@ -65,13 +65,16 @@ def split_data(dataset, bookmark_path=None, user_bookmark_path=None, site="", lo
     return train_dataset, test_dataset
 
 
-def all_items(dataset):
+def get_all_items(dataset):
     """
     返回所有的bookmark
     :param dataset: 数据集
     :return:
     """
-    items = set()
-    for item in dataset["bookmarkID"]:
-        items.add(item)
-    return items
+    user_items = dict()
+    for user, items_timestamp in dataset.items():
+        items = []
+        for item, _ in items_timestamp:
+            items.append(item)
+        user_items[user] = items
+    return user_items

@@ -29,6 +29,8 @@ class RecentPopular:
                     self.item_score[item] = 0
                 self.item_score[item] += 1.0 / (self.alpha * (self.t0 - timestamp))
 
+        self.item_score = sorted(self.item_score.items(), key=lambda x: x[1], reverse=True)
+
     def recommend_users(self, users, N, K=None):
         """
         给用户推荐的商品
@@ -49,5 +51,5 @@ class RecentPopular:
         user_items = set()
         for item, _ in self.dataset[user]:
             user_items.add(item)
-        rec_items = [x for x in self.item_score.keys() if x not in user_items]
+        rec_items = [x[0] for x in self.item_score if x[0] not in user_items]
         return rec_items[:N]

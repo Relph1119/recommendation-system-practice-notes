@@ -11,24 +11,30 @@
 from operator import itemgetter
 
 
-def PersonalRank(G, alpha, root, max_step):
-    rank = {x: 0 for x in G.keys()}
-    rank[root] = 1
-    # 开始迭代
-    for k in range(max_step):
-        tmp = {x: 0 for x in G.keys()}
-        # 取节点i和它的出边尾节点集合ri
-        for i, ri in G.items():
-            # 取节点i的出边的尾节点j以及边E(i,j)的权重wij, 边的权重都为1，归一化之后就上1/len(ri)
-            for j, wij in ri.items():
-                # i是j的其中一条入边的首节点，因此需要遍历图找到j的入边的首节点，
-                # 这个遍历过程就是此处的2层for循环，一次遍历就是一次游走
-                tmp[j] += alpha * rank[i] / (1.0 * len(ri))
-        # 我们每次游走都是从root节点出发，因此root节点的权重需要加上(1 - alpha)
-        tmp[root] += (1 - alpha)
-        rank = tmp
+class PersonalRank:
+    def __init__(self, G, alpha, max_step):
+        self.G = G
+        self.alpha = alpha
+        self.max_step = max_step
 
-    return sorted(rank.items(), key=itemgetter(1), reverse=True)
+    def recommend(self, root):
+        rank = {x: 0 for x in self.G.keys()}
+        rank[root] = 1
+        # 开始迭代
+        for k in range(self.max_step):
+            tmp = {x: 0 for x in self.G.keys()}
+            # 取节点i和它的出边尾节点集合ri
+            for i, ri in self.G.items():
+                # 取节点i的出边的尾节点j以及边E(i,j)的权重wij, 边的权重都为1，归一化之后就上1/len(ri)
+                for j, wij in ri.items():
+                    # i是j的其中一条入边的首节点，因此需要遍历图找到j的入边的首节点，
+                    # 这个遍历过程就是此处的2层for循环，一次遍历就是一次游走
+                    tmp[j] += self.alpha * rank[i] / (1.0 * len(ri))
+            # 我们每次游走都是从root节点出发，因此root节点的权重需要加上(1 - alpha)
+            tmp[root] += (1 - self.alpha)
+            rank = tmp
+
+        return sorted(rank.items(), key=itemgetter(1), reverse=True)
 
 
 if __name__ == '__main__':
@@ -41,7 +47,9 @@ if __name__ == '__main__':
          'c': {'A': 1, 'B': 1, 'C': 1},
          'd': {'B': 1, 'C': 1}}
 
-    rank = PersonalRank(G, alpha, 'b', 50)  # 从'b'节点开始游走
+    model = PersonalRank(G, alpha, max_step=50)
+    # 从'b'节点开始游走
+    rank = model.recommend('b')
 
     for ele in rank:
         print("%s:%.3f \t" % (ele[0], ele[1]))

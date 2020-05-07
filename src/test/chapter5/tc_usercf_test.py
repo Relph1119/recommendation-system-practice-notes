@@ -5,25 +5,29 @@
 @file: main.py
 @time: 2020/4/20 19:14
 @project: recommendation-system-practice-notes
-@desc: 时间上下文相关的ItemCF算法测试
+@desc:
 """
 import os
 import sys
 
 import pandas as pd
 
-from main.chapter5.tc_itemcf import TCItemCF
+from main.chapter5.tc_usercf import TCUserCF
 from main.util import delicious_reader, metric
 
 PROJECT_ROOT = os.path.dirname(sys.path[0])
 user_bookmark_path = os.path.join(PROJECT_ROOT, "../data/delicious-2k/user_taggedbookmarks-timestamps.dat")
 bookmarks_path = os.path.join(PROJECT_ROOT, "../data/delicious-2k/bookmarks.dat")
 
+# 加载数据集
 original_dataset = delicious_reader.load_data(bookmarks_path, user_bookmark_path)
 
+# 对数据集进行划分
 train_dataset, test_dataset = delicious_reader.split_data(
     delicious_reader.filter_dataset(original_dataset, "www.nytimes.com"))
-model = TCItemCF(train_dataset)
+
+# 训练模型
+model = TCUserCF(train_dataset)
 model.fit()
 
 
