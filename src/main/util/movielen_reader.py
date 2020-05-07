@@ -9,9 +9,9 @@ Created on 2018年6月10日
 import random
 
 
-def loadfile(filename):
+def load_file(filename):
     """
-        根据文件名载入数据
+    根据文件名载入数据
     """
     with open(filename, "r") as f:
         for line in f:
@@ -26,23 +26,23 @@ def read_rating_data(path="../../data/ml-1m/ratings.dat", train_rate=1., seed=1)
     :param seed:
     :return: (训练集，测试集)
     """
-    trainset = list()
-    testset = list()
+    train_dataset = list()
+    test_dataset = list()
 
     random.seed(seed)
-    for line in loadfile(filename=path):
+    for line in load_file(filename=path):
         user, movie, rating, _ = line.split('::')
         if random.random() < train_rate:
-            trainset.append([int(user), int(movie), int(rating)])
+            train_dataset.append([int(user), int(movie), int(rating)])
         else:
-            testset.append([int(user), int(movie), int(rating)])
-    return trainset, testset
+            test_dataset.append([int(user), int(movie), int(rating)])
+    return train_dataset, test_dataset
 
 
 def all_items(path="../../data/ml-1m/ratings.dat"):
     """返回所有的movie"""
     items = set()
-    for line in loadfile(filename=path):
+    for line in load_file(filename=path):
         _, movie, _, _ = line.split("::")
         items.add(movie)
     return items

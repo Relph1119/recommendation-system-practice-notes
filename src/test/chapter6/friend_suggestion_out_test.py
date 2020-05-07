@@ -2,7 +2,7 @@
 # encoding: utf-8
 """
 @author: HuRuiFeng
-@file: main.py
+@file: friend_suggestion_out_test.py
 @time: 2020/4/20 19:14
 @project: recommendation-system-practice-notes
 @desc:
@@ -10,15 +10,14 @@
 import os
 import sys
 
-import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
-
-from main.chapter6.friend_suggestion_out_in_cosine import FriendSuggestionOutInCosine
+import numpy as np
+from main.chapter6.friend_suggestion_out import FriendSuggestionOut
 from main.util import slashdot_reader, metric
 
 PROJECT_ROOT = os.path.dirname(sys.path[0])
-slashdot_path = os.path.join(PROJECT_ROOT, "data/soc-Slashdot0902/Slashdot0902.txt")
+slashdot_path = os.path.join(PROJECT_ROOT, "../data/soc-Slashdot0902/Slashdot0902.txt")
 
 # 加载数据集
 slashdot_dataset = slashdot_reader.load_data(slashdot_path)
@@ -51,7 +50,7 @@ for train_index, test_index in kf.split(slashdot_dataset):
     train_dataset = slashdot_dataset.iloc[train_index]
     train_dataset, test_dataset = slashdot_reader.convert_dict(train_dataset, test_dataset)
     # 模型训练
-    model = FriendSuggestionOutInCosine(train_dataset)
+    model = FriendSuggestionOut(train_dataset)
     precision, recall = evaluate(model, test_dataset[0], N)
     precisions.append(precision)
     recalls.append(recall)
@@ -59,7 +58,7 @@ metric_value.append((np.average(precisions), np.average(recalls)))
 
 result_df = pd.DataFrame(
     data=metric_value,
-    index=['FriendSuggestionOutInCosine'],
+    index=['FriendSuggestionOut'],
     columns=['Precision', 'Recall']
 )
 print(result_df)
