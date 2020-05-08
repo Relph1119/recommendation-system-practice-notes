@@ -8,6 +8,9 @@ Created on 2018年6月10日
 """
 import random
 
+import pandas as pd
+from sklearn.utils import shuffle as reset
+
 
 def load_file(filename):
     """
@@ -46,3 +49,61 @@ def all_items(path="../../data/ml-1m/ratings.dat"):
         _, movie, _, _ = line.split("::")
         items.add(movie)
     return items
+
+
+class MovieLenData:
+
+    def __init__(self, user, item, rate, predict=0.0):
+        self.user = user
+        self.item = item
+        self.rate = rate
+        self.predict = predict
+
+
+def load_data(file_path):
+    dataset = pd.read_table(file_path, sep='::',
+                            header=None, engine='python',
+                            names=['user', 'item', 'rating', 'timestamp'])
+    return dataset
+
+
+def split_data(dataset, test_size=0.1, shuffle=False, random_state=None):
+    train_dataset, test_dataset = _train_test_split(dataset, test_size, shuffle, random_state)
+    train_dataset = train_dataset[['user', 'item', 'rating']]
+    test_dataset = test_dataset[['user', 'item', 'rating']]
+    train_dataset = [MovieLenData(*d) for d in train_dataset.values]
+    test_dataset = [MovieLenData(*d) for d in test_dataset.values]
+
+    return train_dataset, test_dataset
+
+
+def _train_test_split(data, test_size=0.3, shuffle=True, random_state=None):
+    """Split DataFrame into random train and test subsets
+
+    Parameters
+    ----------
+    data : pandas dataframe, need to split dataset.
+
+    test_size : float
+        If float, should be between 0.0 and 1.0 and represent the
+        proportion of the dataset to include in the train split.
+
+    random_state : int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
+
+    shuffle : boolean, optional (default=None)
+        Whether or not to shuffle the data before splitting. If shuffle=False
+        then stratify must be None.
+    """
+
+    if shuffle:
+        data = reset(data, random_state=random_state)
+
+    train_size = 1 - test_size
+    test_dataset = data[int(len(data) * train_size):].reset_index(drop=True)
+    train_dataset = data[:int(len(data) * train_size)].reset_index(drop=True)
+
+    return train_dataset, test_dataset
