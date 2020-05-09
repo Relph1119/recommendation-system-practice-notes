@@ -22,7 +22,7 @@
  [@胡锐锋-天国之影-Relph](https://github.com/Relph1119)
 
 ## 打包下载
-阅读笔记PDF下载地址：
+阅读笔记PDF下载地址：https://share.weiyun.com/5vgb0wm
 
 ## LICENSE
 [GNU General Public License v3.0](https://github.com/relph1119/recommendation-system-practice-notes/blob/master/LICENSE)
