@@ -7,8 +7,9 @@
 2. 本笔记将书中大部分的代码都实现了一遍，包括很多书中的数据可视化的图。  
 3. 相关资料下载地址：  
 - 链接：https://pan.baidu.com/s/1tQ5FhAo1gdtFp-JhGX_7Ww 
-- 提取码：pqf4 
-<img src="docs/images/materials.png" width="697"><br/>
+- 提取码：pqf4  
+
+<img src="docs/images/materials.png" width="697">
 
 **注：**
 1. 在pycharm下，需要将src目录设置成Sources Root，因为很多程序都需要读取数据文件，为方便小伙伴们不同的项目路径，采用统一的Sources Root路径。
