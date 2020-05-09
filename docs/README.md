@@ -1,10 +1,10 @@
 # 《推荐系统实践》读书笔记
 &emsp;&emsp;项亮的《推荐系统实践》是推荐系统领域的经典入门教材之一。  
 &emsp;&emsp;本书系统阐述了和推荐系统有关的理论基础，介绍了评价推荐系统优劣的各种标准（比如覆盖率、满意度）和方法（比如AB测试），总结了当今互联网领域中各种和推荐有关的产品和服务，并给出了设计和实现推荐系统的方法与技巧，解答了在真实场景中应用推荐技术时最常遇到的一些问题。  
-&emsp;&emsp;**声明：**本笔记的部分示例代码来源于：https://github.com/qcymkxyc/RecSys和https://github.com/Magic-Bubble/RecommendSystemPractice
 
 ## 使用说明
-&emsp;&emsp;本笔记是搭配《推荐系统实践》一书来阅读。
+1. 本笔记是搭配《推荐系统实践》一书来阅读。
+2. 本笔记将书中大部分的代码都实现了一遍，包括很多书中的数据可视化的图。  
 
 ## 选用的《推荐系统实践》版本
 <img src="./images/recommendation-system-practice-book.jpg" width="336" height= "500">
@@ -20,6 +20,10 @@
 
 ## 打包下载
 阅读笔记PDF下载地址：https://share.weiyun.com/5vgb0wm
+
+## 参考资料
+[1] https://github.com/qcymkxyc/RecSys  
+[2] https://github.com/Magic-Bubble/RecommendSystemPractice
 
 ## LICENSE
 [GNU General Public License v3.0](https://github.com/relph1119/recommendation-system-practice-notes/blob/master/LICENSE)
