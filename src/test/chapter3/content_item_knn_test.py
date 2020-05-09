@@ -69,8 +69,8 @@ def train_popularity(train_dataset):
 if __name__ == '__main__':
     PROJECT_ROOT = os.path.dirname(sys.path[0])
 
-    ratings_path = os.path.join(PROJECT_ROOT, "data/ml-1m/ratings.dat")
-    movies_path = os.path.join(PROJECT_ROOT, "data/ml-1m/movies.dat")
+    ratings_path = os.path.join(PROJECT_ROOT, "../data/ml-1m/ratings.dat")
+    movies_path = os.path.join(PROJECT_ROOT, "../data/ml-1m/movies.dat")
 
     # 加载数据集
     ratings_dataset = movielen_reader.load_data(ratings_path, ['user', 'item', 'rating', 'timestamp'])
