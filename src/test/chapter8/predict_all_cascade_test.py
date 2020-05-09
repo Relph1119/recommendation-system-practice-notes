@@ -23,7 +23,7 @@ PROJECT_ROOT = os.path.dirname(sys.path[0])
 movie_len_path = os.path.join(PROJECT_ROOT, "../data/ml-1m/ratings.dat")
 
 # 加载数据集
-movie_len_dataset = movielen_reader.load_data(movie_len_path)
+movie_len_dataset = movielen_reader.load_data(movie_len_path, ['user', 'item', 'rating', 'timestamp'])
 train_dataset, test_dataset = movielen_reader.split_data(movie_len_dataset)
 
 

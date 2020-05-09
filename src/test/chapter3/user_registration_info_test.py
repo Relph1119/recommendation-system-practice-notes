@@ -2,7 +2,7 @@
 # encoding: utf-8
 """
 @author: HuRuiFeng
-@file: friend_suggestion_in_test.py
+@file: user_registration_info_test.py
 @time: 2020/4/20 19:14
 @project: recommendation-system-practice-notes
 @desc:

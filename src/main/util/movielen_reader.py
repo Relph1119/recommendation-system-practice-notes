@@ -8,6 +8,7 @@ Created on 2018年6月10日
 """
 import random
 
+import numpy as np
 import pandas as pd
 from sklearn.utils import shuffle as reset
 
@@ -60,15 +61,26 @@ class MovieLenData:
         self.predict = predict
 
 
-def load_data(file_path):
-    dataset = pd.read_table(file_path, sep='::',
-                            header=None, engine='python',
-                            names=['user', 'item', 'rating', 'timestamp'])
+def load_data(file_path, column_names=None):
+    """
+    加载数据（由于这个数据文件没有列名，需要指定）
+    :param file_path: 文件路径
+    :param column_names: 数据的列名
+    :return:
+    """
+    if column_names is not None and len(column_names) > 0:
+        dataset = pd.read_table(file_path, sep='::',
+                                header=None, engine='python',
+                                names=column_names)
+    else:
+        dataset = pd.read_table(file_path, sep='::',
+                                engine='python')
+
     return dataset
 
 
 def split_data(dataset, test_size=0.1, shuffle=False, random_state=None):
-    train_dataset, test_dataset = _train_test_split(dataset, test_size, shuffle, random_state)
+    train_dataset, test_dataset = train_test_split(dataset, test_size, shuffle, random_state)
     train_dataset = train_dataset[['user', 'item', 'rating']]
     test_dataset = test_dataset[['user', 'item', 'rating']]
     train_dataset = [MovieLenData(*d) for d in train_dataset.values]
@@ -77,7 +89,7 @@ def split_data(dataset, test_size=0.1, shuffle=False, random_state=None):
     return train_dataset, test_dataset
 
 
-def _train_test_split(data, test_size=0.3, shuffle=True, random_state=None):
+def train_test_split(data, test_size=0.3, shuffle=True, random_state=None):
     """Split DataFrame into random train and test subsets
 
     Parameters
@@ -107,3 +119,47 @@ def _train_test_split(data, test_size=0.3, shuffle=True, random_state=None):
     train_dataset = data[:int(len(data) * train_size)].reset_index(drop=True)
 
     return train_dataset, test_dataset
+
+
+def convert_dict(train_dataset, test_dataset):
+    train_dataset = _convert(train_dataset)
+    test_dataset = _convert(test_dataset)
+    return train_dataset, test_dataset
+
+
+def _convert(data):
+    """
+    处理成字典的形式，user->set(items)
+    :param data: 需要处理的数据集
+    :return:
+    """
+    # 当前用户指向的用户
+    data_dict = {}
+    for u, v in zip(data['user'], data['item']):
+        if u not in data_dict:
+            data_dict[u] = set()
+        if v is not np.nan:
+            data_dict[u].add(v)
+    data_dict = {k: list(data_dict[k]) for k in data_dict}
+    return data_dict
+
+
+def get_all_items(train_dataset, test_dataset):
+    """
+    返回所有的item
+    :param test_dataset: 训练数据集
+    :param train_dataset: 测试数据集
+    :return:
+    """
+    all_items = set()
+
+    def add_items(dataset, all_items):
+        for user, items in dataset.items():
+            items = set(items)
+            all_items = all_items.union(items)
+        return all_items
+
+    all_items = add_items(train_dataset, all_items)
+    all_items = add_items(test_dataset, all_items)
+
+    return all_items
